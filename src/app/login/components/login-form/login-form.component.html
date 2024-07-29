@@ -1,0 +1,34 @@
+<h1>👋 Welcome</h1>
+<p>Sign in to continue!</p>
+
+<form [formGroup]="form">
+  <ion-item lines="none">
+    <ion-input 
+      label="" 
+      placeholder="Enter a email" 
+      type="email" 
+      formControlName="email"
+      errorText="* Please enter your email address"
+    >
+      <ion-icon slot="start" name="mail-outline"></ion-icon> 
+    </ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-input 
+      label="" 
+      placeholder="Enter a password" 
+      type="password" 
+      formControlName="password" 
+      [errorText]="form.get('password')?.hasError('minlength') ? '* Password must be atleast 8 characters long' : '* Please enter your password'"
+    >
+      <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+      <ion-input-password-toggle color="dark" slot="end"></ion-input-password-toggle>
+    </ion-input>
+  </ion-item>
+
+  <p class="forget-text"><a (click)="forgetPassword()">Forgot Password?</a></p>
+  <p class="signup-text">I'm a new user&nbsp;<a (click)="singUp()">Sign Up?</a></p>
+  
+  <ion-button class="login-button" expand="block" (click)="onSubmit()" [disabled]="!form.valid">Login</ion-button>
+</form>

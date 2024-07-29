@@ -1,0 +1,45 @@
+<h1>🚀 Create Account</h1>
+<p>Sign up to get started!</p>
+
+<form [formGroup]="form">
+    <ion-item lines="none">
+      <ion-input 
+        label="" 
+        placeholder="Name" 
+        type="text" 
+        formControlName="name"
+        errorText="* Enter a name"
+      >
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+        <ion-input 
+          label="" 
+          placeholder="Email" 
+          type="email" 
+          formControlName="email"
+          errorText="* Enter valid email"
+        >
+          <ion-icon slot="start" name="mail-outline"></ion-icon> 
+        </ion-input>
+    </ion-item>
+  
+    <ion-item lines="none">
+      <ion-input 
+        label="" 
+        placeholder="Password" 
+        type="password" 
+        formControlName="password" 
+        errorText="* Enter valid password"
+      >
+        <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+        <ion-input-password-toggle color="dark" slot="end"></ion-input-password-toggle>
+      </ion-input>
+    </ion-item>
+
+    <p class="signup-text">I'm already a member&nbsp;<a (click)="backToLogin()">Sign In?</a></p>
+
+    <ion-button class="login-button" expand="block">Sign Up</ion-button>
+</form>

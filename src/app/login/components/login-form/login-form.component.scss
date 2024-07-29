@@ -1,0 +1,27 @@
+.login-button{
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+    --border-radius: 12px;
+    margin-top: 60px;
+    --box-shadow: none;
+}
+.forget-text{
+    a{
+        text-decoration: underline;
+        color: black;
+        cursor: pointer;
+    }
+    text-align: end;
+    margin-bottom: -10px;
+    padding-right: 20px;
+}
+.signup-text{
+    a{
+        text-decoration: underline;
+        color: var(--ion-color-primary);
+        cursor: pointer;
+    }
+    padding-right: 20px;
+    text-align: end;
+}
