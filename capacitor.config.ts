@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'app.frontend',
   appName: 'app-frontend',
-  webDir: 'www'
+  webDir: 'www/browser'
 };
 
 export default config;
