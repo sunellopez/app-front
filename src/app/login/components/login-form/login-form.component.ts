@@ -1,11 +1,12 @@
 import { Component, inject, OnInit} from '@angular/core';
-import { IonicModule, NavController} from '@ionic/angular';
+import { IonicModule, NavController, LoadingController} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { mailOutline, lockClosedOutline} from 'ionicons/icons'
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -18,6 +19,7 @@ export class LoginFormComponent  implements OnInit {
 
   public form!: FormGroup;
   private navController = inject(NavController)
+  private loadingCtrl = inject(LoadingController)
   private authService = inject(AuthService);
   isLogin = false;
 
@@ -51,30 +53,52 @@ export class LoginFormComponent  implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    console.log(this.form.value);
     this.login();
   }
 
-  login() {
+  async login() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+      translucent: true
+    });
+
+    await loading.present();
+
     this.isLogin = true;
+    
+    const loginData = {
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
+
     this.authService
-      .login(this.form.value.email, this.form.value.password)
-      .then((data) => {
-        console.log(data);
-        if (data?.success == 1) {
-          this.authService.navigateByUrl('/home');
-          this.isLogin = false;
-          this.form.reset();
-        } else {
-          this.isLogin = false;
-          this.authService.showAlert(data?.message);
-        }
+      .login(loginData)
+      .pipe(
+        delay(1000)
+      )
+      .subscribe({
+        next: (res) => {
+          this.authService.setUserData(res.token);
+          if (res?.success == 1) {
+            loading.dismiss().then(() => {
+              this.authService.navigateByUrl('/home');
+              this.isLogin = false;
+              this.form.reset();
+            });
+          } else {
+            loading.dismiss().then(() => {
+              this.isLogin = false;
+              this.authService.showAlert(res.message);
+            });
+          }
+        },
+        error: (err) => {
+          loading.dismiss().then(() => {
+            this.isLogin = false;
+          this.authService.showAlert(err.error.message);
+          });
+        },
       })
-      .catch((e) => {
-        console.log(e);
-        this.isLogin = false;
-        this.authService.showAlert(e?.error?.message);
-      });
   }
 
   singUp() {

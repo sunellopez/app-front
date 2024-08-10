@@ -8,12 +8,13 @@ export class StorageService {
 
   constructor() { }
 
-  setStorage(key: string, value: string) {
-    Preferences.set({ key: key, value: value });
+  setStorage(key: string, value: any) {
+    Preferences.set({ key: key, value: JSON.stringify(value) });
   }
-
-  getStorage(key: string) {
-    return Preferences.get({ key: key });
+  
+  async getStorage(key: string) {
+    const { value } = await Preferences.get({ key: key });
+    return value ? JSON.parse(value) : null;
   }
 
   removeStorage(key: string) {

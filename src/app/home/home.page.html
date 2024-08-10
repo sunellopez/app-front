@@ -1,7 +1,6 @@
 <ion-header class="ion-no-border" [translucent]="false">
   <ion-toolbar>
     <ion-title>
-      Today
       <ion-text>
       {{todayDate | date: 'EEE, MMM d yyyy'}}
       </ion-text>
@@ -10,5 +9,5 @@
 </ion-header>
 
 <ion-content [fullscreen]="false">
-
+  <h1>👋 Welcome {{profile.name}}</h1>
 </ion-content>

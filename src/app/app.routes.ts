@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthGuard } from './guard/guard.guard';
 
 export const routes: Routes = [
   {
@@ -8,11 +10,12 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/container/home/home.page').then( m => m.HomePage)
+    loadComponent: () => import('./home/home.page').then( m => m.HomePage),
+    canActivate: [async () => await inject(AuthGuard).canActivate()],
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/container/login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'sign-up',

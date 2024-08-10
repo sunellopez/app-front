@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { StorageService } from '../../utilities/storage.service'
 import { Strings } from '../../utilities/enum/string.enum'
 import { environment } from '../../../environments/environment'
+import { UserResponse } from '../interfaces/userData.interface'
 
 @Injectable({
   providedIn: 'root'
@@ -42,25 +43,8 @@ export class AuthService {
     this.updateToken(token);
   }
 
-  async login(email: string, password: string): Promise<any> {
-    try {
-
-      const data = {
-        email,
-        password,
-      };
-      const response = await lastValueFrom(
-        this.http.post<any>(environment.apiURL + 'login', data)
-      );
-      console.log(response);
-
-      //save token in local storage
-      this.setUserData(response?.token);
-
-      return response;
-    } catch (e) {
-      throw e;
-    }
+  login(loginData: { email: string, password: string }): Observable<UserResponse> {
+    return this.http.post<UserResponse>(`${environment.apiURL}/login`, loginData);
   }
 
   showAlert(message: string) {
@@ -68,24 +52,24 @@ export class AuthService {
       .create({
         header: 'Authentication failed',
         message: message,
-        buttons: ['Okay'],
+        buttons: ['Ok'],
       })
       .then((alertEl) => alertEl.present());
   }
 
-  async authGuard(): Promise<boolean> {
-    try {
-      const token = await this.getToken();
+  authGuard(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      let token = this.getToken();
       console.log(token);
-      if (!token) {
-        this.router.navigateByUrl('/login', { replaceUrl: true });
+      if (token != null) {
+        return true;
+      } else {
+        this.navigateByUrl('/login');
         return false;
       }
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+  }
+
+  getProfile() {
+    return this.http.get<any>(environment.apiURL + '/profile')
   }
 
   navigateByUrl(url: string) {

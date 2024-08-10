@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
-import { LoginFormComponent } from "../../components/login-form/login-form.component";
+import { LoginFormComponent } from "./components/login-form/login-form.component";
 
 @Component({
   selector: 'app-login',
